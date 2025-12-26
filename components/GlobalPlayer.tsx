@@ -17,10 +17,27 @@ export default function GlobalPlayer() {
     useEffect(() => {
         document.addEventListener("deviceready", () => {
             if (typeof cordova !== "undefined" && cordova.plugins.backgroundMode) {
+                // 1. Configure notification (REQUIRED for Android 8+)
+                cordova.plugins.backgroundMode.setDefaults({
+                    title: "Mazzo",
+                    text: "Playing music...",
+                    icon: 'ic_launcher',
+                    color: "00ff00",
+                    resume: true,
+                    hidden: false,
+                    bigText: true
+                });
+
+                // 2. Enable the mode
                 cordova.plugins.backgroundMode.enable();
+
+                // 3. Handle activation
                 cordova.plugins.backgroundMode.on("activate", () => {
                     cordova.plugins.backgroundMode.disableWebViewOptimizations();
                 });
+
+                // 4. Ask for battery optimizations permission
+                cordova.plugins.backgroundMode.disableBatteryOptimizations();
             }
         }, false);
     }, []);

@@ -14,6 +14,7 @@
     "@capacitor/core": "^8.0.0",
     "@lordicon/react": "^1.11.0",
     "cordova-plugin-background-mode": "^0.7.3",
+    "cordova-plugin-device": "^3.0.0",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
     "react": "19.2.3",
