@@ -23,14 +23,14 @@ export default function Home() {
   }, [token, queue.length, currentSong, fillQueue]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black text-white flex flex-col items-center justify-center -mt-20">
-      <div className="text-center space-y-8 animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black text-white flex flex-col items-center justify-center -mt-20 px-4">
+      <div className="text-center space-y-6 md:space-y-8 animate-fade-in">
 
         {/* Hero Section */}
         <div className="space-y-4">
-          <h1 className="text-9xl font-patrick-hand flex items-center justify-center gap-6 tracking-tight drop-shadow-2xl">
+          <h1 className="text-6xl md:text-9xl font-patrick-hand flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 tracking-tight drop-shadow-2xl">
             Mazzo
-            <div className="relative w-[120px] h-[120px]">
+            <div className="relative w-[80px] h-[80px] md:w-[120px] md:h-[120px]">
               <Image
                 src={musicGif}
                 alt="Music Vibe"
@@ -40,8 +40,8 @@ export default function Home() {
               />
             </div>
           </h1>
-          <p className="text-gray-400 text-2xl font-light tracking-wide max-w-lg mx-auto">
-            Discover the latest trending songs free on Mazzo. <br /> Your music, your vibe.
+          <p className="text-gray-400 text-lg md:text-2xl font-light tracking-wide max-w-lg mx-auto">
+            Discover the latest trending songs free on Mazzo. <br className="hidden md:block" /> Your music, your vibe.
           </p>
         </div>
 
