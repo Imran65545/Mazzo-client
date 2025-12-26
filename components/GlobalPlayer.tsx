@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { usePlayer } from "../context/PlayerContext";
 import YouTubePlayer from "./YouTubePlayer";
 import PlayerControls from "./PlayerControls";
+import { Browser } from '@capacitor/browser';
 
 declare var cordova: any;
 
@@ -15,31 +16,40 @@ export default function GlobalPlayer() {
     const [seekTo, setSeekTo] = useState<number | null>(null);
 
     useEffect(() => {
-        document.addEventListener("deviceready", () => {
-            if (typeof cordova !== "undefined" && cordova.plugins.backgroundMode) {
-                // 1. Configure notification (REQUIRED for Android 8+)
-                cordova.plugins.backgroundMode.setDefaults({
-                    title: "Mazzo",
-                    text: "Playing music...",
-                    icon: 'ic_launcher',
-                    color: "00ff00",
-                    resume: true,
-                    hidden: false,
-                    bigText: true
-                });
+        const initBackgroundMode = () => {
+            try {
+                if (typeof cordova !== "undefined" && cordova.plugins?.backgroundMode) {
+                    // 1. Configure notification (REQUIRED for Android 8+)
+                    cordova.plugins.backgroundMode.setDefaults({
+                        title: "Mazzo",
+                        text: "Playing music...",
+                        icon: 'ic_launcher',
+                        color: "00ff00",
+                        resume: true,
+                        hidden: false,
+                        bigText: true
+                    });
 
-                // 2. Enable the mode
-                cordova.plugins.backgroundMode.enable();
+                    // 2. Enable the mode
+                    cordova.plugins.backgroundMode.enable();
 
-                // 3. Handle activation
-                cordova.plugins.backgroundMode.on("activate", () => {
-                    cordova.plugins.backgroundMode.disableWebViewOptimizations();
-                });
+                    // 3. Handle activation
+                    cordova.plugins.backgroundMode.on("activate", () => {
+                        cordova.plugins.backgroundMode.disableWebViewOptimizations();
+                    });
 
-                // 4. Ask for battery optimizations permission
-                cordova.plugins.backgroundMode.disableBatteryOptimizations();
+                    // 4. Ask for battery optimizations permission
+                    cordova.plugins.backgroundMode.disableBatteryOptimizations();
+
+                    console.log("Background mode enabled successfully");
+                }
+            } catch (err) {
+                console.error("Failed to enable background mode:", err);
             }
-        }, false);
+        };
+
+        document.addEventListener("deviceready", initBackgroundMode, false);
+        return () => document.removeEventListener("deviceready", initBackgroundMode);
     }, []);
 
     // 🔒 Security: Do not render for Free users (non-admins)
@@ -60,6 +70,12 @@ export default function GlobalPlayer() {
         // Reset seekTo after a short delay so user can seek again to same spot if needed (though unlikely)
         // or just let the player handle it. React-youtube might need the prop to change.
         setTimeout(() => setSeekTo(null), 100);
+    };
+
+    const handleOpenInBrowser = async () => {
+        if (currentSong?.videoId) {
+            await Browser.open({ url: `https://www.youtube.com/watch?v=${currentSong.videoId}` });
+        }
     };
 
     return (
@@ -86,6 +102,7 @@ export default function GlobalPlayer() {
                 onTogglePlay={togglePlay}
                 onNext={playNext}
                 onSeek={handleSeek}
+                onOpenInBrowser={handleOpenInBrowser}
             />
         </>
     );

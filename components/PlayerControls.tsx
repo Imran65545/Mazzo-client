@@ -12,6 +12,7 @@ type Props = {
   onTogglePlay: () => void;
   onNext: () => void;
   onSeek: (time: number) => void;
+  onOpenInBrowser: () => void;
 };
 
 export default function PlayerControls({
@@ -26,6 +27,7 @@ export default function PlayerControls({
   onTogglePlay,
   onNext,
   onSeek,
+  onOpenInBrowser,
 }: Props) {
   const [isHovering, setIsHovering] = useState(false);
 
@@ -44,6 +46,14 @@ export default function PlayerControls({
 
   return (
     <div className="fixed bottom-[60px] left-0 right-0 bg-zinc-900 text-white p-4 flex flex-col items-center border-t border-zinc-800 shadow-2xl z-50">
+
+      {/* 🚀 Play In Background Button */}
+      <button
+        onClick={onOpenInBrowser}
+        className="mb-3 flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full text-xs font-medium text-green-400 border border-green-500/30 hover:bg-white/20 active:scale-95 transition-all"
+      >
+        <span>🔊 Play in Background (Chrome)</span>
+      </button>
 
       {/* 🎵 Progress Bar (Spotify Style) */}
       <div
@@ -81,7 +91,6 @@ export default function PlayerControls({
       </div>
 
       <div className="flex items-center w-full gap-4">
-        {/* Thumbnail */}
         {/* Thumbnail */}
         <img
           src={thumbnail || "https://placehold.co/150"}
