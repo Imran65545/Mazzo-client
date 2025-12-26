@@ -1,9 +1,13 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.imran.mazzo',
+  appId: 'com.mazzo.app',
   appName: 'Mazzo',
-  webDir: 'public'
+  webDir: 'out',
+
+  server: {
+    cleartext: true
+  }
 };
 
 export default config;
