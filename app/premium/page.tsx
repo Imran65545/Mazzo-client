@@ -137,18 +137,18 @@ export default function PremiumPage() {
                         </div>
                     )}
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-col md:flex-row gap-3">
                         <input
                             type="text"
                             placeholder="Enter promo code"
                             value={couponCode}
                             onChange={(e) => setCouponCode(e.target.value)}
-                            className="flex-1 bg-black text-white p-3 rounded-lg border border-zinc-700 outline-none focus:border-green-500 transition-colors"
+                            className="bg-black text-white p-3 rounded-lg border border-zinc-700 outline-none focus:border-green-500 transition-colors w-full"
                         />
                         <button
                             onClick={handleRedeem}
                             disabled={loading || !couponCode}
-                            className="px-6 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[100px]"
+                            className="px-6 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center w-full md:w-auto min-w-[100px]"
                         >
                             {loading ? <Loader2 className="animate-spin" size={20} /> : "Apply"}
                         </button>
