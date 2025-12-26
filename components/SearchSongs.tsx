@@ -43,16 +43,17 @@ export default function SearchSongs({ onSelect }: any) {
   return (
     <div className="w-full">
       <h2 className="text-2xl font-bold text-white mb-4">Search Songs</h2>
-      <div className="flex gap-3 mb-8">
+      <div className="flex flex-col md:flex-row gap-3 mb-6 md:mb-8">
         <input
-          className="flex-1 bg-[#18181b] border border-[#27272a] rounded-lg px-4 py-3 text-gray-300 focus:outline-none focus:border-green-500 transition-colors placeholder:text-gray-500"
+          className="w-full md:flex-1 bg-[#18181b] border border-[#27272a] rounded-lg px-4 py-3 md:py-4 text-gray-300 focus:outline-none focus:border-green-500 transition-colors placeholder:text-gray-500 text-base md:text-lg"
           placeholder="Search by song or artist..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && search()}
         />
         <button
           onClick={search}
-          className="px-6 py-3 bg-[#22c55e] hover:bg-[#16a34a] text-black font-semibold rounded-lg transition-colors"
+          className="w-full md:w-auto px-8 py-3 md:py-4 bg-[#22c55e] hover:bg-[#16a34a] text-black font-bold rounded-lg transition-all active:scale-95 shadow-[0_0_15px_rgba(34,197,94,0.2)] md:text-lg"
         >
           Search
         </button>
