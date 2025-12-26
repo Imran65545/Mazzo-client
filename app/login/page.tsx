@@ -43,8 +43,9 @@ export default function LoginPage() {
             } else {
                 setError(data.message || "Authentication failed");
             }
-        } catch (err) {
-            setError("Something went wrong");
+        } catch (err: any) {
+            console.error("Login Error:", err);
+            setError(err.message || JSON.stringify(err) || "Something went wrong");
         } finally {
             setLoading(false);
         }

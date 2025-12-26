@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePlayer } from "../context/PlayerContext";
 import YouTubePlayer from "./YouTubePlayer";
 import PlayerControls from "./PlayerControls";
+
+declare var cordova: any;
 
 export default function GlobalPlayer() {
     const { currentSong, playNext, liked, toggleLike, isPlaying, togglePlay, user } = usePlayer();
@@ -11,6 +13,17 @@ export default function GlobalPlayer() {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [seekTo, setSeekTo] = useState<number | null>(null);
+
+    useEffect(() => {
+        document.addEventListener("deviceready", () => {
+            if (typeof cordova !== "undefined" && cordova.plugins.backgroundMode) {
+                cordova.plugins.backgroundMode.enable();
+                cordova.plugins.backgroundMode.on("activate", () => {
+                    cordova.plugins.backgroundMode.disableWebViewOptimizations();
+                });
+            }
+        }, false);
+    }, []);
 
     // 🔒 Security: Do not render for Free users (non-admins)
     if (user && !user.isAdmin && user.plan === "free") {
