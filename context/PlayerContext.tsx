@@ -54,12 +54,14 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         }
     }, [token]);
 
-    // 🔒 Security: Monitor for Free Plan + Playing and force stop
+    // 🔒 Security: Monitor for Free Plan + Playing and force stop if limit reached
     useEffect(() => {
         if (user && !user.isAdmin && user.plan === "free" && isPlaying) {
-            // Force stop
-            setIsPlaying(false);
-            setCurrentSong(null);
+            if ((user.songsPlayed || 0) >= 5) {
+                // Force stop
+                setIsPlaying(false);
+                setCurrentSong(null);
+            }
         }
     }, [user, isPlaying]);
 
@@ -115,9 +117,9 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
 
         // 🔒 Plan Restriction Check
         if (user && !user.isAdmin) {
-            // Free Checks
-            if (user.plan === "free") {
-                alert("🔒 Premium Feature\n\nYou need a Lite or Standard plan to play music.\nGo to Premium to upgrade!");
+            // Free Checks (5 Song Limit)
+            if (user.plan === "free" && (user.songsPlayed || 0) >= 5) {
+                alert("🔒 Free Limit Reached\n\nYou have played 5 free songs. Upgrade to Premium for valid streaming!");
                 return;
             }
 
@@ -135,7 +137,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         // Record Play (if logged in)
         if (token) {
             // Optimistic update
-            if (user && user.plan === "lite") {
+            if (user && (user.plan === "lite" || user.plan === "free")) {
                 setUser(prev => prev ? { ...prev, songsPlayed: (prev.songsPlayed || 0) + 1 } : null);
             }
 

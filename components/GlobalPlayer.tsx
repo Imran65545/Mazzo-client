@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { usePlayer } from "../context/PlayerContext";
 import YouTubePlayer from "./YouTubePlayer";
 import PlayerControls from "./PlayerControls";
-import { Browser } from '@capacitor/browser';
 
 declare var cordova: any;
 
@@ -72,12 +71,6 @@ export default function GlobalPlayer() {
         setTimeout(() => setSeekTo(null), 100);
     };
 
-    const handleOpenInBrowser = async () => {
-        if (currentSong?.videoId) {
-            await Browser.open({ url: `https://www.youtube.com/watch?v=${currentSong.videoId}` });
-        }
-    };
-
     return (
         <>
             <YouTubePlayer
@@ -102,7 +95,6 @@ export default function GlobalPlayer() {
                 onTogglePlay={togglePlay}
                 onNext={playNext}
                 onSeek={handleSeek}
-                onOpenInBrowser={handleOpenInBrowser}
             />
         </>
     );
