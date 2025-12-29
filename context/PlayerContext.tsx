@@ -57,7 +57,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     // 🔒 Security: Monitor for Free Plan + Playing and force stop if limit reached
     useEffect(() => {
         if (user && !user.isAdmin && user.plan === "free" && isPlaying) {
-            if ((user.songsPlayed || 0) >= 10) {
+            if ((Number(user.songsPlayed) || 0) >= 10) {
                 // Force stop
                 setIsPlaying(false);
                 setCurrentSong(null);
@@ -117,8 +117,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
 
         // 🔒 Plan Restriction Check
         if (user && !user.isAdmin) {
-            // Free Checks (5 Song Limit)
-            if (user.plan === "free" && (user.songsPlayed || 0) >= 10) {
+            // Free Checks (10 Song Limit)
+            if (user.plan === "free" && (Number(user.songsPlayed) || 0) >= 10) {
                 alert("🔒 Free Limit Reached\n\nYou have played 10 free songs. Upgrade to Premium for valid streaming!");
                 return;
             }

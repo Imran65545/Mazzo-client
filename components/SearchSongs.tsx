@@ -21,7 +21,7 @@ export default function SearchSongs({ onSelect }: any) {
   };
 
   // 🔒 Lock for Free Users ONLY if limit reached
-  if (user && !user.isAdmin && user.plan === "free" && (user.songsPlayed || 0) >= 10) {
+  if (user && !user.isAdmin && user.plan === "free" && (Number(user.songsPlayed) || 0) >= 10) {
     return (
       <div className="w-full h-64 flex flex-col items-center justify-center text-center bg-[#18181b] rounded-xl border border-[#27272a] p-6 space-y-4">
         <div className="bg-zinc-800 p-4 rounded-full">
