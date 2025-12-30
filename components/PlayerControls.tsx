@@ -12,6 +12,8 @@ type Props = {
   onTogglePlay: () => void;
   onNext: () => void;
   onSeek: (time: number) => void;
+  isVideoMode: boolean; // Added
+  onToggleVideo: () => void; // Added
 };
 
 export default function PlayerControls({
@@ -26,6 +28,8 @@ export default function PlayerControls({
   onTogglePlay,
   onNext,
   onSeek,
+  isVideoMode,
+  onToggleVideo,
 }: Props) {
   const [isHovering, setIsHovering] = useState(false);
 
@@ -125,6 +129,15 @@ export default function PlayerControls({
             title="Next Song"
           >
             <span className="text-xl">⏭</span>
+          </button>
+
+          {/* 📺 VIDEO TOGGLE BUTTON */}
+          <button
+            onClick={onToggleVideo}
+            className={`p-2 rounded-full transition-all active:scale-90 ${isVideoMode ? "text-green-500 bg-green-500/10" : "text-gray-400 hover:text-white"}`}
+            title="Watch Video"
+          >
+            <span className="text-xl">📺</span>
           </button>
         </div>
       </div>

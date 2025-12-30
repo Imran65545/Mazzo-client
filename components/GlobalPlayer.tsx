@@ -13,6 +13,7 @@ export default function GlobalPlayer() {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [seekTo, setSeekTo] = useState<number | null>(null);
+    const [isVideoMode, setIsVideoMode] = useState(false);
 
     useEffect(() => {
         const initBackgroundMode = () => {
@@ -81,6 +82,8 @@ export default function GlobalPlayer() {
                 onEnableSound={() => setSoundEnabled(true)}
                 onSongEnd={playNext}
                 onProgress={handleProgress}
+                isVideoMode={isVideoMode}
+                onToggleVideo={() => setIsVideoMode(!isVideoMode)}
             />
 
             <PlayerControls
@@ -95,6 +98,8 @@ export default function GlobalPlayer() {
                 onTogglePlay={togglePlay}
                 onNext={playNext}
                 onSeek={handleSeek}
+                isVideoMode={isVideoMode}
+                onToggleVideo={() => setIsVideoMode(!isVideoMode)}
             />
         </>
     );

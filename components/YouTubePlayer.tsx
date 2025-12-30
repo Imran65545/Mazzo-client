@@ -7,10 +7,12 @@ type Props = {
   videoId: string;
   soundEnabled: boolean;
   isPlaying: boolean;
-  seekTo: number | null; // Added
+  seekTo: number | null;
   onEnableSound: () => void;
   onSongEnd: () => void;
-  onProgress: (currentTime: number, duration: number) => void; // Added
+  onProgress: (currentTime: number, duration: number) => void;
+  isVideoMode: boolean; // Added
+  onToggleVideo: () => void; // Added
 };
 
 export default function YouTubePlayer({
@@ -21,15 +23,17 @@ export default function YouTubePlayer({
   onEnableSound,
   onSongEnd,
   onProgress,
+  isVideoMode,
+  onToggleVideo,
 }: Props) {
   const playerRef = useRef<any>(null);
 
   const opts = {
-    height: "1",
-    width: "1",
+    height: "100%",
+    width: "100%",
     playerVars: {
       autoplay: 1,
-      controls: 0,
+      controls: isVideoMode ? 1 : 0, // Enable controls in video mode
       mute: soundEnabled ? 0 : 0,
     },
   };
@@ -66,14 +70,14 @@ export default function YouTubePlayer({
     };
   }, [isPlaying]);
 
-  // Handle Seeking via prop change (naive approach, better handled via callback/ref usually, but props work for unidirectional flow)
+  // Handle Seeking via prop change
   useEffect(() => {
     if (playerRef.current && seekTo !== null) {
       playerRef.current.seekTo(seekTo, true);
     }
   }, [seekTo]);
 
-  // 🔊 Automatically manage sound when soundEnabled changes (NOT videoId, onReady handles new videos)
+  // 🔊 Automatically manage sound
   useEffect(() => {
     if (playerRef.current && soundEnabled && typeof playerRef.current.unMute === 'function') {
       try {
@@ -85,24 +89,32 @@ export default function YouTubePlayer({
     }
   }, [soundEnabled]);
 
-  const handleEnableSound = () => {
-    if (playerRef.current) {
-      playerRef.current.unMute();
-      playerRef.current.setVolume(80);
-      onEnableSound();
-    }
-  };
-
   return (
     <>
-      {/* Hidden YouTube Player */}
-      <div className="absolute w-px h-px overflow-hidden opacity-0 pointer-events-none">
+      {/* Container that toggles between hidden/audio-only and full-screen video */}
+      <div className={
+        isVideoMode
+          ? "fixed inset-0 z-[60] w-full h-full bg-black flex items-center justify-center transition-all duration-300"
+          : "absolute w-px h-px overflow-hidden opacity-0 pointer-events-none"
+      }>
+
+        {/* Close Button for Video Mode */}
+        {isVideoMode && (
+          <button
+            onClick={onToggleVideo}
+            className="absolute top-4 right-4 z-[60] bg-black/50 text-white p-2 rounded-full backdrop-blur-sm"
+          >
+            ✕
+          </button>
+        )}
+
         <YouTube
           videoId={videoId}
           opts={opts}
+          className={isVideoMode ? "w-full h-full" : ""}
+          iframeClassName={isVideoMode ? "w-full h-full" : ""}
           onReady={(e) => {
             playerRef.current = e.target;
-            // Ensure correct state on load
             if (soundEnabled) {
               e.target.unMute();
               e.target.setVolume(80);
@@ -111,9 +123,6 @@ export default function YouTubePlayer({
           onEnd={onSongEnd}
         />
       </div>
-
-      {/* Overlay Button for Browser Autoplay Restrictions */}
-
     </>
   );
 }
