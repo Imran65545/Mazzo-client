@@ -1,11 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { usePlayer } from "@/context/PlayerContext";
 import { Play, Music, Lock } from "lucide-react";
 import Link from "next/link";
+import YouTubePlayer from "@/components/YouTubePlayer";
 
 export default function MusicPlayerPage() {
-  const { currentSong, queue, playSong, user } = usePlayer();
+  const { currentSong, queue, playSong, user, isPlaying, togglePlay } = usePlayer();
+  const [isVideoMode, setIsVideoMode] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [seekTo, setSeekTo] = useState<number | null>(null);
 
   // 🔒 Lock for Free Users
   if (user && !user.isAdmin && user.plan === "free") {
@@ -37,30 +44,65 @@ export default function MusicPlayerPage() {
     );
   }
 
+  const handleProgress = (curr: number, dur: number) => {
+    setCurrentTime(curr);
+    setDuration(dur);
+  };
+
+  const handleSeek = (time: number) => {
+    setSeekTo(time);
+    setTimeout(() => setSeekTo(null), 100);
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col md:flex-row p-6 pb-32 gap-8 max-w-7xl mx-auto">
+    <>
+      {/* YouTube Video Player (Hidden by default, shown when isVideoMode is true) */}
+      {currentSong && currentSong.videoId && (
+        <YouTubePlayer
+          videoId={currentSong.videoId}
+          soundEnabled={soundEnabled}
+          isPlaying={isPlaying}
+          seekTo={seekTo}
+          onEnableSound={() => setSoundEnabled(true)}
+          onSongEnd={() => {}}
+          onProgress={handleProgress}
+          isVideoMode={isVideoMode}
+          onToggleVideo={() => setIsVideoMode(!isVideoMode)}
+        />
+      )}
 
-      {/* LEFT: NOW PLAYING */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center">
-        {/* Glow Effect */}
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-          <img
-            src={currentSong.thumbnail}
-            alt={currentSong.title}
-            className="relative w-72 h-72 md:w-96 md:h-96 rounded-lg shadow-2xl object-cover"
-          />
-        </div>
+      <div className="min-h-screen bg-black text-white flex flex-col md:flex-row p-6 pb-32 gap-8 max-w-7xl mx-auto">
 
-        <div className="mt-8 space-y-2">
-          <h1 className="text-3xl md:text-4xl font-bold font-patrick-hand tracking-wide">
-            {currentSong.title}
-          </h1>
-          <p className="text-xl text-zinc-400">
-            {currentSong.artist}
-          </p>
+        {/* LEFT: NOW PLAYING */}
+        <div className="flex-1 flex flex-col items-center justify-center text-center">
+          {/* Glow Effect */}
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+            <img
+              src={currentSong.thumbnail}
+              alt={currentSong.title}
+              className="relative w-72 h-72 md:w-96 md:h-96 rounded-lg shadow-2xl object-cover"
+            />
+            
+            {/* Video Icon Button */}
+            <button
+              onClick={() => setIsVideoMode(!isVideoMode)}
+              className="absolute bottom-4 right-4 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full backdrop-blur-sm transition-all hover:scale-110 z-10"
+              title={isVideoMode ? "Hide Video" : "Show Video"}
+            >
+              <span className="text-2xl">{isVideoMode ? "📺" : "🎬"}</span>
+            </button>
+          </div>
+
+          <div className="mt-8 space-y-2">
+            <h1 className="text-3xl md:text-4xl font-bold font-patrick-hand tracking-wide">
+              {currentSong.title}
+            </h1>
+            <p className="text-xl text-zinc-400">
+              {currentSong.artist}
+            </p>
+          </div>
         </div>
-      </div>
 
       {/* RIGHT: UP NEXT QUEUE */}
       <div className="flex-1 bg-[#18181b] rounded-2xl p-6 overflow-y-auto max-h-[600px] border border-[#27272a]">
@@ -104,6 +146,7 @@ export default function MusicPlayerPage() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 }

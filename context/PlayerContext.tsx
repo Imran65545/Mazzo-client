@@ -16,7 +16,7 @@ type PlayerContextType = {
     queue: Song[];
     liked: boolean;
     isPlaying: boolean;
-    playSong: (song: Song) => void;
+    playSong: (song: Song, isLiked?: boolean) => void;
     playNext: () => void;
     toggleLike: () => void;
     addToQueue: (songs: Song[]) => void;
@@ -86,7 +86,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const playSong = async (song: Song) => {
+    const playSong = async (song: Song, isLiked?: boolean) => {
         if (!song || !song.videoId) {
             console.error("Attempted to play invalid song:", song);
             return;
@@ -105,19 +105,41 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
             }
         }
 
-
-
         setCurrentSong(song);
         setIsPlaying(true);
-        setLiked(false);
-
+        
+        // If isLiked is explicitly passed (e.g., from liked page), use it
+        if (isLiked !== undefined) {
+            setLiked(isLiked);
+        } else {
+            // Otherwise, check like status from server
+            if (token) {
+                try {
+                    const likeCheckRes = await fetch(`${API_URL}/api/activity/check-like?videoId=${song.videoId}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    
+                    if (likeCheckRes.ok) {
+                        const likeData = await likeCheckRes.json();
+                        setLiked(likeData.liked === true);
+                    } else {
+                        setLiked(false);
+                    }
+                } catch (err) {
+                    console.error("Error checking like status:", err);
+                    setLiked(false);
+                }
+            } else {
+                setLiked(false);
+            }
+        }
+        
         // Record Play (if logged in)
         if (token) {
-            // ... (keep recording logic)
             fetch(`${API_URL}/api/activity/play`, {
                 method: "POST",
                 headers: { Authorization: `Bearer ${token}` }
-            }).catch(e => console.error("Failed to record play", e));
+            }).catch(e => console.error("Failed to record play", e)); 
         }
     };
 

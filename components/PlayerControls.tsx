@@ -138,7 +138,7 @@ export default function PlayerControls({
               }`}
             title={isVideoMode ? "Switch to Audio" : "Switch to Video"}
           >
-            <span className="text-xl">{isVideoMode ? "📺" : "🎵"}</span>
+            <span className="text-xl">{isVideoMode ? "📺" : "🎬"}</span>
           </button>
         </div>
       </div>
