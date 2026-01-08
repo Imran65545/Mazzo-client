@@ -26,14 +26,6 @@ const patrickHand = Patrick_Hand({
 export const metadata: Metadata = {
   title: "Mazzo",
   description: "Discover latest trending songs free on Mazzo",
-  icons: {
-    icon: [
-      {
-        url: "/mazzo.png?v=2",
-        type: "image/png",
-      },
-    ],
-  },
 };
 
 export default function RootLayout({
