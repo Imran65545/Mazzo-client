@@ -134,10 +134,11 @@ export default function PlayerControls({
           {/* 📺 VIDEO TOGGLE BUTTON */}
           <button
             onClick={onToggleVideo}
-            className={`p-2 rounded-full transition-all active:scale-90 ${isVideoMode ? "text-green-500 bg-green-500/10" : "text-gray-400 hover:text-white"}`}
-            title="Watch Video"
+            className={`p-2 rounded-full transition-all active:scale-90 ${isVideoMode ? "text-blue-500" : "text-gray-400 hover:text-white"
+              }`}
+            title={isVideoMode ? "Switch to Audio" : "Switch to Video"}
           >
-            <span className="text-xl">📺</span>
+            <span className="text-xl">{isVideoMode ? "📺" : "🎵"}</span>
           </button>
         </div>
       </div>

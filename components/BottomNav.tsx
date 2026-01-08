@@ -25,10 +25,7 @@ export default function BottomNav() {
                 <span className="text-[10px] font-medium">Search</span>
             </Link>
 
-            <Link href="/player" className={getLinkClass("/player")}>
-                <PlayCircle size={24} />
-                <span className="text-[10px] font-medium">Player</span>
-            </Link>
+
 
             <Link href="/profile" className={getLinkClass("/profile")}>
                 <User size={24} />

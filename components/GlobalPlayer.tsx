@@ -85,7 +85,6 @@ export default function GlobalPlayer() {
                 isVideoMode={isVideoMode}
                 onToggleVideo={() => setIsVideoMode(!isVideoMode)}
             />
-
             <PlayerControls
                 title={currentSong.title}
                 artist={currentSong.artist}

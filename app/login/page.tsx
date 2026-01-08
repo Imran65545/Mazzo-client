@@ -16,6 +16,7 @@ export default function LoginPage() {
     const [isLogin, setIsLogin] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -87,13 +88,23 @@ export default function LoginPage() {
                             onChange={(e) => setEmail(e.target.value)}
                             className="w-full bg-black/50 p-3 rounded-lg border border-[#27272a] focus:border-green-500 outline-none block text-white transition-colors"
                         />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-black/50 p-3 rounded-lg border border-[#27272a] focus:border-green-500 outline-none block text-white transition-colors"
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full bg-black/50 p-3 pr-11 rounded-lg border border-[#27272a] focus:border-green-500 outline-none block text-white transition-colors"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white text-lg"
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                            >
+                                {showPassword ? "🙈" : "👁️"}
+                            </button>
+                        </div>
                         <button
                             type="submit"
                             disabled={loading}
