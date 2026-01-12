@@ -72,7 +72,7 @@ export default function PremiumPage() {
                     <ul className="space-y-4 mb-8">
                         <li className="flex items-center gap-3">
                             <Check size={20} className="text-blue-500" />
-                            <span className="text-gray-200">Listen to 30 songs</span>
+                            <span className="text-gray-200">Listen to 100 songs</span>
                         </li>
                         <li className="flex items-center gap-3">
                             <Check size={20} className="text-blue-500" />
@@ -103,7 +103,7 @@ export default function PremiumPage() {
                     <ul className="space-y-4 mb-8">
                         <li className="flex items-center gap-3">
                             <Check size={20} className="text-green-500" />
-                            <span className="text-gray-200">Listen to 50 songs</span>
+                            <span className="text-gray-200">Listen to unlimited songs</span>
                         </li>
                         <li className="flex items-center gap-3">
                             <Check size={20} className="text-green-500" />

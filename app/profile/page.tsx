@@ -103,7 +103,7 @@ export default function ProfilePage() {
                     <span className="uppercase text-xs font-bold tracking-wider hidden md:block">Playlist</span>
                     <h1 className="text-4xl md:text-8xl font-black tracking-tighter shadow-lg">Liked Songs</h1>
                     <div className="flex items-center justify-center md:justify-start gap-2 text-sm font-medium text-gray-300 mt-2">
-                        <span>{user?.email || "User"}</span>
+                        <span>{user?.name || user?.email || "User"}</span>
                         <span>•</span>
                         <span>{likedSongs.length} songs</span>
                     </div>
