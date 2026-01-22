@@ -16,7 +16,7 @@ export default function LikedSongsPage() {
   useEffect(() => {
     const fetchLiked = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/activity/liked`, {
+        const res = await fetch(`/api/activity/liked`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -35,7 +35,7 @@ export default function LikedSongsPage() {
     e.stopPropagation(); // Prevent playing the song when clicking unlike
     
     try {
-      const res = await fetch(`${API_URL}/api/activity/like`, {
+      const res = await fetch(`/api/activity/like`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

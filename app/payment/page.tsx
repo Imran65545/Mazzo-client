@@ -45,7 +45,7 @@ function PaymentContent() {
         try {
             // Artificial delay of 3 seconds + API call
             const [res] = await Promise.all([
-                fetch(`${API_URL}/api/payment/verify`, {
+                fetch(`/api/payment/verify`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

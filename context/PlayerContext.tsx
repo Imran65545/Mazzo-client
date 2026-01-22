@@ -40,30 +40,12 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
 
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-    // Fetch User Profile
-    useEffect(() => {
-        const fetchUser = async () => {
-            if (!token) return;
-            try {
-                const res = await fetch(`${API_URL}/api/auth/me`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    setUser(data);
-                }
-            } catch (err) {
-                console.error("Failed to fetch user:", err);
-            }
-        };
-
-        fetchUser();
-    }, [token]);
+    // ... (keep useEffects same)
 
     // Fetch recommended songs
     const fetchNextSong = async (limit = 1): Promise<Song[] | null> => {
         try {
-            const res = await fetch(`${API_URL}/api/recommend/next?limit=${limit}`, {
+            const res = await fetch(`/api/recommend/next?limit=${limit}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             if (!res.ok) return null;
@@ -125,7 +107,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
 
         setCurrentSong(song);
         setIsPlaying(true);
-
+        
         // If isLiked is explicitly passed (e.g., from liked page), use it
         if (isLiked !== undefined) {
             setLiked(isLiked);
@@ -133,10 +115,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
             // Otherwise, check like status from server
             if (token) {
                 try {
-                    const likeCheckRes = await fetch(`${API_URL}/api/activity/check-like?videoId=${song.videoId}`, {
+                    const likeCheckRes = await fetch(`/api/activity/check-like?videoId=${song.videoId}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
-
+                    
                     if (likeCheckRes.ok) {
                         const likeData = await likeCheckRes.json();
                         setLiked(likeData.liked === true);
@@ -151,13 +133,13 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
                 setLiked(false);
             }
         }
-
+        
         // Record Play (if logged in)
         if (token) {
-            fetch(`${API_URL}/api/activity/play`, {
+            fetch(`/api/activity/play`, {
                 method: "POST",
                 headers: { Authorization: `Bearer ${token}` }
-            }).catch(e => console.error("Failed to record play", e));
+            }).catch(e => console.error("Failed to record play", e)); 
         }
     };
 
@@ -202,7 +184,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         setLiked(newLikedState);
 
         try {
-            await fetch(`${API_URL}/api/activity/like`, {
+            await fetch(`/api/activity/like`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

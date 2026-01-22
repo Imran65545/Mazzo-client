@@ -7,7 +7,7 @@ export default function RecentPlayed() {
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/activity/recent`, {
+    fetch(`/api/activity/recent`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

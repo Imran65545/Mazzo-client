@@ -23,7 +23,7 @@ export default function PremiumPage() {
         }
 
         try {
-            const res = await fetch(`${API_URL}/api/coupons/redeem`, {
+            const res = await fetch(`/api/coupons/redeem`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

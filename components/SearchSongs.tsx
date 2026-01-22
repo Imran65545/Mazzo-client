@@ -18,7 +18,7 @@ export default function SearchSongs({ onSelect }: any) {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `${API_URL}/api/youtube/search?q=${query}`
+        `/api/youtube/search?q=${query}`
       );
       const data = await res.json();
       setSongs(data);

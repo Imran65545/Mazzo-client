@@ -33,7 +33,7 @@ export default function ProfilePage() {
     const fetchLikedSongs = async () => {
         if (!token) return;
         try {
-            const res = await fetch(`${API_URL}/api/activity/liked`, {
+            const res = await fetch(`/api/activity/liked`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
